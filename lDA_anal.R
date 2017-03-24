@@ -10,9 +10,7 @@
 # temporalFeatures<-temporalFeatures[,-c(9,10,15,16)]
 
 source("samplDat.R")
-trainSet<-sampLDat(temporalFeatures$indivID)
-
-
+trainSet=sampLDat(temporalFeatures$indivID)
 
 library(MASS)
 

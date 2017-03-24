@@ -3,17 +3,18 @@
 
 rm(list=ls())
 
-# setwd("~/Documents/Indiv_ID_project/scriptsR") ## For desktop
-setwd("~/Documents/Kelsa/Individual_identification_project/scriptsR") ## For macBook
+setwd("~/Documents/Indiv_ID_project/scriptsR") ## For desktop
+# setwd("~/Documents/Kelsa/Individual_identification_project/scriptsR") ## For macBook
+
 # Calling Files
 
 ## For desktop
-# temp = list.files(path="~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
-# for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
+temp = list.files(path="~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
+for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
 
 ## For macBook
-temp = list.files(path="~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
-for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
+# temp = list.files(path="~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
+# for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
 
 
 temporalFeatures<-data.frame(indivID=character(),nIght=character(),chirpN=numeric()
