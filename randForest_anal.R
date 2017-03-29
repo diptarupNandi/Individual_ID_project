@@ -60,4 +60,3 @@ sum(diag(prop.table(accRF1W5)))
 
 
 ## Vote collection
-
