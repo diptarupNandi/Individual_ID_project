@@ -6,7 +6,9 @@ library(randomForest)
 source("samplDat.R")
 
 tempFeatures=temporalFeatures[, -c(2,3,9,10,15,16,17)] # Getting rid of the 6th and 7th syllables
-tempFeaturesComp=na.omit(tempFeatures)
+tempFeaturesComp=na.omit(tempFeatures) # Removing the rows with NAs
+
+## Creating train and test sets
 trainSet<-sampLDat(tempFeaturesComp$indivID)
 testData=tempFeaturesComp[-trainSet,]
 
@@ -16,19 +18,19 @@ testData=tempFeaturesComp[-trainSet,]
 # accBag0=table(testResult0,testData$indivID)
 # sum(diag(prop.table(accBag0)))
 
-
+source("getVotes.R")
 
 ## Bagging
 bagTF=randomForest(as.factor(indivID)~., data=tempFeaturesComp, subset=trainSet, mtry=11, importance=TRUE) 
 testResult=predict(bagTF,testData,type="class")
-accBag=table(testResult,testData$indivID)
+accBag=table(testData$indivID,testResult)
 sum(diag(prop.table(accBag)))
 
 ## Random Forest (m=p/3)
 
 randFor1.TF=randomForest(as.factor(indivID)~., data=tempFeaturesComp, subset=trainSet, importance=TRUE) 
 testResult.RF1=predict(randFor1.TF,testData,type="class")
-accRF1=table(testResult.RF1,testData$indivID)
+accRF1=table(testData$indivID,testResult.RF1)
 sum(diag(prop.table(accRF1)))
 
 importance(randFor1.TF)
@@ -41,7 +43,7 @@ tunedP <- tuneRF(x=tempFeaturesComp[trainSet,-1],y=as.factor(tempFeaturesComp[tr
 mtry_tune <- tunedP[which(tunedP[,2]==min(tunedP[,2]))[1],1]
 randForT1.TF=randomForest(as.factor(indivID)~., data=tempFeaturesComp, subset=trainSet, mtry=mtry_tune, ntree=2000,importance=T) 
 testResult.RFT1=predict(randForT1.TF,testData,type="class")
-accRFT1=table(testResult.RFT1,testData$indivID)
+accRFT1=table(testData$indivID,testResult.RFT1)
 sum(diag(prop.table(accRFT1)))
 
 
@@ -53,10 +55,10 @@ testDataW5=tempFeaturesCompW5[-trainSetW5,]
 
 randFor1W5.TF=randomForest(as.factor(indivID)~., data=tempFeaturesCompW5, subset=trainSetW5, importance=TRUE) 
 testResult.RF1W5=predict(randFor1W5.TF,testDataW5,type="class")
-accRF1W5=table(testResult.RF1W5,testDataW5$indivID)
+accRF1W5=table(testDataW5$indivID,testResult.RF1W5)
 sum(diag(prop.table(accRF1W5)))
 
 
-
-
 ## Vote collection
+
+rfAcc=getVotes(testData$indivID, testResult.RFT1)

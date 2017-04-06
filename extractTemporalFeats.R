@@ -12,6 +12,8 @@ extractTF<-function(daT){
   syLLDur=matrix(nrow=length(onset_ind),ncol=7) # to store all syllable durations
   syLLGap=matrix(nrow=length(onset_ind),ncol=6) # to store all the interval between syllables
   chirpProps=matrix(nrow=length(onset_ind),ncol=3)
+  
+  
   for (ii in 1:length(chirpOnset)) {
     syllpChirp=offset_ind[ii]-onset_ind[ii]+1
     chirpProps[ii,1]=syllpChirp
