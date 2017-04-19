@@ -23,8 +23,8 @@ ldFitT1 <- lda(indivID ~ syl1Dur+syl2Dur+syl3Dur+syl4Dur+syl5Dur+syl12Gap+syl23G
 
 
 # With all the variables without any interaction term
-ldFit2 <- lda(indivID ~ syl1Dur+syl2Dur+syl3Dur+syl4Dur+syl5Dur+syl12Gap+syl23Gap+syl34Gap+syl45Gap+chirpDur+chirpGap, data=tempFeaturesComp[trainSet,])
-testResult2<-predict(ldFit2,tempFeaturesComp[-trainSet,])
+ldFit2 <- lda(indivID ~ syl1Dur+syl2Dur+syl3Dur+syl4Dur+syl5Dur+syl12Gap+syl23Gap+syl34Gap+syl45Gap+chirpDur+chirpGap, data=temporalFeatures[trainSet,])
+testResult2<-predict(ldFit2,temporalFeatures[-trainSet,])
 
 # With all the variables for only 5syLChirps
 ldFit5sylCh <- lda(indivID ~ syl1Dur+syl2Dur+syl3Dur+syl4Dur+syl5Dur+syl12Gap+syl23Gap+syl34Gap+syl45Gap+chirpDur+chirpGap, data=subset(temporalFeatures[trainSet,],syLpChirp==5))
@@ -63,7 +63,7 @@ testResultEq<-predict(ldFitEq,temporalFeaturesEq[-trainSetEq,])
 
 ## Assess the accuracy of the prediction
 acTable1 <- table(temporalFeatures$indivID[-ldFit1$na.action], ldFit1$class)
-acTable2 <- table(tempFeaturesComp$indivID[-trainSet], testResult2$class)
+acTable2 <- table(temporalFeatures$indivID[-trainSet], testResult2$class)
 acTable5sylCh <- table(temporalFeatures$indivID[-trainSet], testResult5sylCh$class)
 acTablePV <- table(temporalFeatures$indivID[-trainSet], testResultPV$class)
 acTableEq <- table(temporalFeaturesEq$indivID[-trainSetEq], testResultEq$class)
@@ -129,5 +129,3 @@ accSeq[6,1]<-sum(diag(prop.table(acTable2)))
 
 plot(seq(1,6,1),accSeq$V1)
 
-source("getVotes.R")
-ldaAcc=getVotes(tempFeaturesComp$indivID[-trainSet], testResult2$class)

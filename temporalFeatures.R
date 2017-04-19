@@ -6,14 +6,19 @@ rm(list=ls())
 setwd("~/Documents/Indiv_ID_project/scriptsR") ## For desktop
 # setwd("~/Documents/Kelsa/Individual_identification_project/scriptsR") ## For macBook
 
+library(dplyr)
+library(plyr)
+library(gtools)
+
+source("extractTemporalFeats.R")
 # Calling Files
 
 ## For desktop
-temp =mixedsort(list.files(path="~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt"))
-for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
+txtNam = mixedsort(list.files(path="~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt"))
+# for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
 
 ## For macBook
-# temp = list.files(path="~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
+# txtNam = list.files(path="~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/" ,pattern="*.txt")
 # for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
 
 
@@ -30,22 +35,24 @@ temporalFeatures<-data.frame(indivID=character(),nIght=character(),chirpN=numeri
 
 
 couNT=1
-for (i in 1:length(temp) ){
-  data=get(temp[i])
-  source("extractTemporalFeats.R")
+for (i in 1:length(txtNam) ){
+  # fileNam=tolower(file_path_sans_ext(txtnam[i]))
+  data = read.table(paste("~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/", txtNam[i],sep=""))
+  # data=get(temp[i])
   tempSyll=extractTF(data)
-  temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),1]=substr(temp[i],1,3)
-  temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),2]=substr(temp[i],nchar(temp[i])-4,nchar(temp[i])-4)
+  temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),1]=substr(txtNam[i],1,3)
+  temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),2]=substr(txtNam[i],nchar(txtNam[i])-4,nchar(txtNam[i])-4)
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),3]=1:nrow(tempSyll)
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),4:ncol(temporalFeatures)]=tempSyll
   couNT=couNT+nrow(tempSyll)
   rm(data,tempSyll)  
 }
 
+temporalFeatures=arrange(temporalFeatures,indivID,nIght,chirpN)
 # temporalFeaturesN<-temporalFeatures
 
 # colnames(temporalFeaturesN)[11:16]<-c("syl12Gap","syl23Gap","syl34Gap","syl45Gap","syl56Gap","syl67Gap")
 # temporalFeaturesN[,11:16]<-temporalFeaturesN[,11:16]-temporalFeaturesN[,4:9]
 
-# write.csv(temporalFeaturesN,file="temporalFeatures1_forModel1.csv")
+write.csv(temporalFeatures,file="perchirp_temporalFeats.csv",row.names = FALSE)
 

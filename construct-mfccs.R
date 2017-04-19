@@ -58,7 +58,8 @@ for(iter in 1:ncric){
   # extract cricket id
   cricket = tolower(substring(nam[iter],1,3))
   # extract record id
-  record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],5,6)))
+  # record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],5,6)))
+  record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],8,8)))
   # for each click
   for(i in 1:nrow(wc)){
     # extract chirp lenght
@@ -115,7 +116,8 @@ for(iter in 1:ncric){
   
   # add id variables to results just generated
   mfccs$cricket = tolower(substring(nam[iter],1,3))
-  mfccs$record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],5,6)))
+  # mfccs$record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],5,6)))
+  mfccs$record = ifelse(nchar(nam[iter])==9, tolower(substring(nam[iter],5,5)), tolower(substring(nam[iter],8,8)))
   mfccs$chirpid = cumsum(clicktimes$V2)
   
   # add syllable id
@@ -157,5 +159,5 @@ chirpres = data.frame(chirpres)
 chirpres <- plyr::join(chirpres, perchirp_ffres, by=c("cricket","record","chirpid"))
 
 # write final results to csv
-write.csv(syllres,"persyll-mfccs.csv")
-write.csv(chirpres,"perchirp-mfccs.csv")
+write.csv(syllres,"persyll-mfccs.csv",row.names = FALSE)
+write.csv(chirpres,"perchirp-mfccs.csv",row.names = FALSE)
