@@ -119,8 +119,29 @@ testResult.RF1W5=predict(randFor1W5.TF,testDataW5,type="class")
 accRF1W5=table(testDataW5$indivID,testResult.RF1W5)
 sum(diag(prop.table(accRF1W5)))
 
+callFeatsCompW5=callFeatsComp[,-c(6,10)] # Removing 5th syllable features
+tunedP.CombW5 <- tuneRF(x=callFeatsCompW5[trainF,-1],y=as.factor(callFeatsCompW5[trainF,1]),ntreeTry=2000,stepFactor=2)
+mtry_tune.CombW5 <- tunedP.CombW5[which(tunedP.CombW5[,2]==min(tunedP.CombW5[,2]))[1],1]
+randForT1.CombW5=randomForest(as.factor(indivID)~., data=callFeatsCompW5, subset=trainF, mtry=mtry_tune.CombW5, ntree=2000, importance=T) 
+predRFT1.CombW5=predict(randForT1.CombW5,testF,type="class")
+accRFT1.CombW5=table(testF$indivID,predRFT1.CombW5)
+sum(diag(prop.table(accRFT1.CombW5)))
 
+callFeatsCompW45=callFeatsComp[,-c(5,6,9,10)] # Removing 4th and 5th syllable features
+tunedP.CombW45 <- tuneRF(x=callFeatsCompW45[trainF,-1],y=as.factor(callFeatsCompW45[trainF,1]),ntreeTry=2000,stepFactor=2)
+mtry_tune.CombW45 <- tunedP.CombW45[which(tunedP.CombW45[,2]==min(tunedP.CombW45[,2]))[1],1]
+randForT1.CombW45=randomForest(as.factor(indivID)~., data=callFeatsCompW45, subset=trainF, mtry=mtry_tune.CombW45, ntree=2000, importance=T) 
+predRFT1.CombW45=predict(randForT1.CombW45,testF,type="class")
+accRFT1.CombW45=table(testF$indivID,predRFT1.CombW45)
+sum(diag(prop.table(accRFT1.CombW45)))
 
+callFeatsCompW345=callFeatsComp[,-c(4,5,6,8,9,10)] # Removing 3rd, 4th and 5th syllable features
+tunedP.CombW345 <- tuneRF(x=callFeatsCompW345[trainF,-1],y=as.factor(callFeatsCompW345[trainF,1]),ntreeTry=2000,stepFactor=2)
+mtry_tune.CombW345 <- tunedP.CombW345[which(tunedP.CombW345[,2]==min(tunedP.CombW345[,2]))[1],1]
+randForT1.CombW345=randomForest(as.factor(indivID)~., data=callFeatsCompW345, subset=trainF, mtry=mtry_tune.CombW345, ntree=2000, importance=T) 
+predRFT1.CombW345=predict(randForT1.CombW345,testF,type="class")
+accRFT1.CombW345=table(testF$indivID,predRFT1.CombW345)
+sum(diag(prop.table(accRFT1.CombW345)))
 
 ## Vote collection
 
