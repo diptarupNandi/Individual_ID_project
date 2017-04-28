@@ -143,6 +143,51 @@ predRFT1.CombW345=predict(randForT1.CombW345,testF,type="class")
 accRFT1.CombW345=table(testF$indivID,predRFT1.CombW345)
 sum(diag(prop.table(accRFT1.CombW345)))
 
+
+# Random Forest with 1st night chirps as the training data
+tunedP.CombN <- tuneRF(x=callFeatsCompN[trainN,-1],y=as.factor(callFeatsCompN[trainN,1]),ntreeTry=300,stepFactor=2)
+mtry_tune.CombN <- tunedP.CombN[which(tunedP.CombN[,2]==min(tunedP.CombN[,2]))[1],1]
+randForT1.CombN=randomForest(as.factor(indivID)~., data=callFeatsCompN, subset=trainN, mtry=mtry_tune.CombN, ntree=2000, importance=T) 
+predRFT1.CombN=predict(randForT1.CombN,testN,type="class")
+accRFT1.CombN=table(testN$indivID,predRFT1.CombN)
+sum(diag(prop.table(accRFT1.CombN)))
+
+predRFT1.CombN=predict(randForT1.CombN,testN,type="class")
+accRFT1.CombN=table(testN$indivID,predRFT1.CombN)
+sum(diag(prop.table(accRFT1.CombN)))
+
+# Random Forest with within-night chirps for 1st and 2nd night separately
+tunedP.CombN1 <- tuneRF(x=callFeatsCompcN1[trainN1,-1],y=as.factor(callFeatsCompcN1[trainN1,1]),ntreeTry=500,stepFactor=2)
+mtry_tune.CombN1 <- tunedP.CombN1[which(tunedP.CombN1[,2]==min(tunedP.CombN1[,2]))[1],1]
+randForT1.CombN1=randomForest(as.factor(indivID)~., data=callFeatsCompcN1, subset=trainN1, mtry=mtry_tune.CombN1, ntree=2000, importance=T) 
+predRFT1.CombN1=predict(randForT1.CombN1,testN1,type="class")
+accRFT1.CombN1=table(testN1$indivID,predRFT1.CombN1)
+sum(diag(prop.table(accRFT1.CombN1)))
+
+tunedP.CombN2 <- tuneRF(x=callFeatsCompcN2[trainN2,-1],y=as.factor(callFeatsCompcN2[trainN2,1]),ntreeTry=2000,stepFactor=2)
+mtry_tune.CombN2 <- tunedP.CombN2[which(tunedP.CombN2[,2]==min(tunedP.CombN2[,2]))[1],1]
+randForT1.CombN2=randomForest(as.factor(indivID)~., data=callFeatsCompcN2, subset=trainN2, mtry=mtry_tune.CombN2, ntree=2000, importance=T) 
+predRFT1.CombN2=predict(randForT1.CombN2,testN2,type="class")
+accRFT1.CombN2=table(testN2$indivID,predRFT1.CombN2)
+sum(diag(prop.table(accRFT1.CombN2)))
+
+
+
+# Without tuning P
+randFor.CombN=randomForest(as.factor(indivID)~., data=callFeatsCompN, subset=trainN, ntree=2000, importance=T) 
+predRF.CombN=predict(randFor.CombN,testN,type="class")
+accRF.CombN=table(testN$indivID,predRF.CombN)
+sum(diag(prop.table(accRF.CombN)))
+
+predRF.ComboN2=predict(randFor.CombN,testoN2,type="class")
+accRF.ComboN2=table(testoN2$indivID,predRF.ComboN2)
+sum(diag(prop.table(accRF.ComboN2)))
+
+predRF.ComboN3=predict(randFor.CombN,testoN3,type="class")
+accRF.ComboN3=table(testN3$indivID,predRF.ComboN3)
+sum(diag(prop.table(accRF.ComboN3)))
+
+
 ## Vote collection
 
 rfAcc=getVotes(testData$indivID, testResult.RFT1)

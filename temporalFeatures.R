@@ -22,6 +22,8 @@ txtNam = mixedsort(list.files(path="~/Documents/Indiv_ID_project/Data/chirps_On_
 # for (i in 1:length(temp)) assign(temp[i], read.table(file.path ( path= "~/Documents/Kelsa/Individual_identification_project/Data/chirps_On_Off_set_txt_files/",temp[i]),stringsAsFactors=FALSE))
 
 
+
+# Initializes the dataframe with column names
 temporalFeatures<-data.frame(indivID=character(),nIght=character(),chirpN=numeric()
                          ,syl1Dur=numeric(),syl2Dur=numeric(),syl3Dur=numeric(),
                          syl4Dur=numeric(),syl5Dur=numeric(),syl6Dur=numeric(),
@@ -32,22 +34,26 @@ temporalFeatures<-data.frame(indivID=character(),nIght=character(),chirpN=numeri
                          chirpGap=numeric(),
                          stringsAsFactors=FALSE)
 
-
-
-couNT=1
+# Extracts the temporal features from every file  
+couNT=1 # Counter for incrementing the output index
 for (i in 1:length(txtNam) ){
   # fileNam=tolower(file_path_sans_ext(txtnam[i]))
   data = read.table(paste("~/Documents/Indiv_ID_project/Data/chirps_On_Off_set_txt_files/", txtNam[i],sep=""))
   # data=get(temp[i])
-  tempSyll=extractTF(data)
+  tempSyll=extractTF(data) # Estimating the temporal feature values from the text files
+  # Gets the individual ID from the txt filename
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),1]=substr(txtNam[i],1,3)
+  # Gets the night of recording from the txt file name
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),2]=substr(txtNam[i],nchar(txtNam[i])-4,nchar(txtNam[i])-4)
+  # Chirp number
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),3]=1:nrow(tempSyll)
+  # the temporal features
   temporalFeatures[couNT:(couNT+nrow(tempSyll)-1),4:ncol(temporalFeatures)]=tempSyll
   couNT=couNT+nrow(tempSyll)
   rm(data,tempSyll)  
 }
 
+# Arranges the individual chirps in ascending order of recording night and drops chirpNumber
 temporalFeatures=arrange(temporalFeatures,indivID,nIght,chirpN)
 # temporalFeaturesN<-temporalFeatures
 
